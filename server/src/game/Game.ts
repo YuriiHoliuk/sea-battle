@@ -1,12 +1,4 @@
-import { 
-  GameState, 
-  ShotResult, 
-  Position, 
-  Ship,
-  ShipType,
-  CellState,
-  SHIP_SIZES
-} from '@sea-battle/shared';
+import { GameState, ShotResult, Position, Ship, CellState, SHIP_SIZES } from '@sea-battle/shared';
 import { GAME_RULES } from '@sea-battle/shared';
 
 /**
@@ -56,7 +48,7 @@ export class Game {
       id: playerId,
       ships: [],
       shots: [],
-      ready: false
+      ready: false,
     });
 
     // If we have max players, transition to ship placement phase
@@ -73,7 +65,7 @@ export class Game {
    */
   placeShip(playerId: string, ship: Ship): { valid: boolean; message?: string } {
     const player = this.players.get(playerId);
-    
+
     if (!player) {
       return { valid: false, message: 'Player not found' };
     }
@@ -98,7 +90,10 @@ export class Game {
   /**
    * Validate ship placement
    */
-  private validateShipPlacement(ship: Ship, existingShips: Ship[]): { valid: boolean; message?: string } {
+  private validateShipPlacement(
+    ship: Ship,
+    existingShips: Ship[]
+  ): { valid: boolean; message?: string } {
     // Check if ship already exists
     if (existingShips.some(s => s.id === ship.id)) {
       return { valid: false, message: 'Ship already placed' };
@@ -107,11 +102,21 @@ export class Game {
     // Check if ship is within grid bounds
     const shipLength = SHIP_SIZES[ship.type];
     if (ship.orientation === 'horizontal') {
-      if (ship.position.x < 0 || ship.position.x + shipLength > 10 || ship.position.y < 0 || ship.position.y >= 10) {
+      if (
+        ship.position.x < 0 ||
+        ship.position.x + shipLength > 10 ||
+        ship.position.y < 0 ||
+        ship.position.y >= 10
+      ) {
         return { valid: false, message: 'Ship placement out of bounds' };
       }
     } else {
-      if (ship.position.y < 0 || ship.position.y + shipLength > 10 || ship.position.x < 0 || ship.position.x >= 10) {
+      if (
+        ship.position.y < 0 ||
+        ship.position.y + shipLength > 10 ||
+        ship.position.x < 0 ||
+        ship.position.x >= 10
+      ) {
         return { valid: false, message: 'Ship placement out of bounds' };
       }
     }
@@ -133,9 +138,7 @@ export class Game {
     const positions1 = this.getShipPositions(ship1);
     const positions2 = this.getShipPositions(ship2);
 
-    return positions1.some(pos1 => 
-      positions2.some(pos2 => pos1.x === pos2.x && pos1.y === pos2.y)
-    );
+    return positions1.some(pos1 => positions2.some(pos2 => pos1.x === pos2.x && pos1.y === pos2.y));
   }
 
   /**
@@ -162,7 +165,7 @@ export class Game {
    */
   setPlayerReady(playerId: string): boolean {
     const player = this.players.get(playerId);
-    
+
     if (!player) {
       return false;
     }
@@ -173,7 +176,7 @@ export class Game {
     // Check if all players are ready
     if (this.areAllPlayersReady()) {
       this.state = GameState.IN_PROGRESS;
-      
+
       // Set initial turn
       const playerIds = Array.from(this.players.keys());
       this.currentTurn = playerIds[Math.floor(Math.random() * playerIds.length)];
@@ -218,11 +221,11 @@ export class Game {
 
     // Check if hit
     const hitShip = opponent.ships.find(ship => this.isShipHitByShot(ship, position));
-    
+
     if (hitShip) {
       // Update ship hits
       hitShip.hits.push(position);
-      
+
       // Check if ship is sunk
       const isSunk = hitShip.hits.length === SHIP_SIZES[hitShip.type];
       hitShip.isSunk = isSunk;
@@ -264,7 +267,7 @@ export class Game {
   private areAllShipsSunk(playerId: string): boolean {
     const player = this.players.get(playerId);
     if (!player) return false;
-    
+
     return player.ships.every(ship => ship.isSunk);
   }
 
@@ -285,15 +288,17 @@ export class Game {
     // Get opponent
     const opponentId = Array.from(this.players.keys()).find(id => id !== playerId);
     if (!opponentId) return null;
-    
+
     const opponent = this.players.get(opponentId)!;
 
     // Create opponent grid with hidden ships
-    const opponentGrid = Array(10).fill(null).map(() => Array(10).fill(CellState.EMPTY));
-    
+    const opponentGrid = Array(10)
+      .fill(null)
+      .map(() => Array(10).fill(CellState.EMPTY));
+
     // Mark shots on opponent grid
     player.shots.forEach(shot => {
-      const isHit = opponent.ships.some(ship => 
+      const isHit = opponent.ships.some(ship =>
         ship.hits.some(hit => hit.x === shot.x && hit.y === shot.y)
       );
       opponentGrid[shot.y][shot.x] = isHit ? CellState.HIT : CellState.MISS;
@@ -316,7 +321,7 @@ export class Game {
       winner: this.winner,
       yourShips: player.ships,
       yourShots: player.shots,
-      opponentGrid
+      opponentGrid,
     };
   }
-} 
+}

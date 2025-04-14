@@ -43,4 +43,4 @@ export default {
   GAME: GAME_CONFIG,
   DB: DB_CONFIG,
   REDIS: REDIS_CONFIG,
-}; 
+};

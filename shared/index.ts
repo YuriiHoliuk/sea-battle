@@ -12,4 +12,4 @@ export * from './constants/game';
 
 // Export all utilities
 export * from './utils/grid';
-export * from './utils/gameHelpers'; 
+export * from './utils/gameHelpers';

@@ -48,12 +48,14 @@ sea-battle/
 ### Installation
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/username/sea-battle.git
    cd sea-battle
    ```
 
 2. Install dependencies:
+
    ```
    yarn install
    ```

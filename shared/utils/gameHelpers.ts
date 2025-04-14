@@ -3,7 +3,17 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import { CellState, Direction, Grid, Orientation, Position, Ship, ShipType, SHIP_SIZES, ShotResult } from '../types/game';
+import {
+  CellState,
+  Direction,
+  Grid,
+  Orientation,
+  Position,
+  Ship,
+  ShipType,
+  SHIP_SIZES,
+  ShotResult,
+} from '../types/game';
 import { GRID_SIZE } from '../constants/game';
 
 /**
@@ -37,7 +47,9 @@ export function createShips(): Ship[] {
  * Creates an empty grid
  */
 export function createEmptyGrid(size: number = GRID_SIZE): Grid {
-  return Array(size).fill(null).map(() => Array(size).fill(CellState.EMPTY));
+  return Array(size)
+    .fill(null)
+    .map(() => Array(size).fill(CellState.EMPTY));
 }
 
 /**
@@ -50,7 +62,11 @@ export function isWithinBounds(pos: Position, gridSize: number = GRID_SIZE): boo
 /**
  * Processes a shot on the grid and returns the result
  */
-export function processShot(grid: Grid, position: Position, ships: Ship[]): {
+export function processShot(
+  grid: Grid,
+  position: Position,
+  ships: Ship[]
+): {
   result: ShotResult;
   newGrid: Grid;
   updatedShips: Ship[];
@@ -63,10 +79,10 @@ export function processShot(grid: Grid, position: Position, ships: Ship[]): {
   const newGrid = grid.map(row => [...row]);
   let result: ShotResult;
   let shipSunk: Ship | undefined;
-  
+
   // Get the cell state at the shot position
   const cellState = grid[position.y][position.x];
-  
+
   if (cellState === CellState.EMPTY) {
     // Miss
     newGrid[position.y][position.x] = CellState.MISS;
@@ -75,48 +91,48 @@ export function processShot(grid: Grid, position: Position, ships: Ship[]): {
     // Hit
     newGrid[position.y][position.x] = CellState.HIT;
     result = ShotResult.HIT;
-    
+
     // Update the ship that was hit
     const updatedShips = ships.map(ship => {
       // Check if this shot hit this ship
       const isPositionOnShip = isPositionOnShip(ship, position);
-      
+
       if (isPositionOnShip) {
         // Add hit to the ship
         const newHits = [...ship.hits, { ...position }];
         const shipSize = SHIP_SIZES[ship.type];
         const isSunk = newHits.length >= shipSize;
-        
+
         const updatedShip = {
           ...ship,
           hits: newHits,
           isSunk,
         };
-        
+
         // Check if the ship was sunk by this hit
         if (isSunk && !ship.isSunk) {
           result = ShotResult.SUNK;
           shipSunk = updatedShip;
         }
-        
+
         return updatedShip;
       }
-      
+
       return ship;
     });
-    
+
     return { result, newGrid, updatedShips, shipSunk };
   }
-  
+
   return { result, newGrid, updatedShips: ships };
 }
 
 /**
  * Checks if a position is on a given ship
  */
-function isPositionOnShip(ship: Ship, position: Position): boolean {
+export function isPositionOnShip(ship: Ship, position: Position): boolean {
   const shipSize = SHIP_SIZES[ship.type];
-  
+
   if (ship.orientation === Orientation.HORIZONTAL) {
     return (
       position.y === ship.position.y &&
@@ -143,16 +159,12 @@ export function areAllShipsSunk(ships: Ship[]): boolean {
  * Converts an Orientation to a Direction (for compatibility)
  */
 export function orientationToDirection(orientation: Orientation): Direction {
-  return orientation === Orientation.HORIZONTAL 
-    ? Direction.HORIZONTAL 
-    : Direction.VERTICAL;
+  return orientation === Orientation.HORIZONTAL ? Direction.HORIZONTAL : Direction.VERTICAL;
 }
 
 /**
  * Converts a Direction to an Orientation (for compatibility)
  */
 export function directionToOrientation(direction: Direction): Orientation {
-  return direction === Direction.HORIZONTAL 
-    ? Orientation.HORIZONTAL 
-    : Orientation.VERTICAL;
-} 
+  return direction === Direction.HORIZONTAL ? Orientation.HORIZONTAL : Orientation.VERTICAL;
+}

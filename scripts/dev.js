@@ -8,9 +8,12 @@
  * It imports functionality from the modules directory and provides a CLI.
  */
 
+/* eslint-env node */
+/* global process, console */
+
 // Add at the very beginning of the file
 if (process.env.DEBUG === '1') {
-	console.error('DEBUG - dev.js received args:', process.argv.slice(2));
+  console.error('DEBUG - dev.js received args:', process.argv.slice(2));
 }
 
 import { runCLI } from './modules/commands.js';

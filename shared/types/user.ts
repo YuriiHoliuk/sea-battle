@@ -78,4 +78,4 @@ export interface UserSettings {
   theme: string;
   autoRotateShips: boolean;
   language: string;
-} 
+}

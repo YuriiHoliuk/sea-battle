@@ -106,4 +106,4 @@ export interface GameErrorPayload {
   playerId: string;
   errorCode: string;
   message: string;
-} 
+}

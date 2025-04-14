@@ -5,6 +5,7 @@
 /**
  * Standard API response
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -74,4 +75,4 @@ export interface CreateGameRequest {
   mode: string;
   inviteCode?: string;
   difficulty?: string; // for AI games
-} 
+}

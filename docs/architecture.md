@@ -99,6 +99,7 @@ shared/
 The system utilizes two forms of communication:
 
 1. **REST API** - For non-real-time operations:
+
    - User authentication and registration
    - User profile management
    - Game history and statistics
@@ -113,12 +114,14 @@ The system utilizes two forms of communication:
 ### Real-time Game Flow
 
 1. **Game Initialization**:
+
    - Client connects to Socket.IO server
    - Client requests matchmaking or private game
    - Server pairs players and creates game session
    - Server sends initial game state to all players
 
 2. **Game Play**:
+
    - Player submits move (shot coordinates)
    - Server validates move
    - Server updates game state
@@ -181,4 +184,4 @@ This architecture supports horizontal scaling to handle thousands of concurrent 
 2. **Input Validation** - Server-side validation of all inputs
 3. **Rate Limiting** - Protection against flooding attacks
 4. **Secure WebSockets** - Authenticated WebSocket connections
-5. **Data Validation** - Server-side validation of game moves to prevent cheating 
+5. **Data Validation** - Server-side validation of game moves to prevent cheating

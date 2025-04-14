@@ -103,4 +103,4 @@ export const AI_DIFFICULTY = {
     SMART_SHOT_PROBABILITY: 0.9,
     MEMORY_TURNS: 10,
   },
-}; 
+};

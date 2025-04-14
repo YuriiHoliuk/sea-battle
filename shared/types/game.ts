@@ -151,4 +151,4 @@ export interface GameResult {
   duration: number; // In seconds
   shots: number;
   hits: number;
-} 
+}

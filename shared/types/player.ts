@@ -42,4 +42,4 @@ export interface FireAction {
 
 export interface ReadyAction {
   ready: boolean;
-} 
+}

@@ -16,23 +16,17 @@ We need a robust representation of the board that includes grid size, states for
 **Acceptance Criteria**
 
 - A data model represents all necessary cell states.
-    
 - Ability to initialize an empty board of configurable dimensions.
-    
 - Comprehensive unit tests ensuring valid board creation.
-    
 
 **Suggested Technologies**
 
 - Use in-memory data structures in a backend language (e.g., Node.js/TypeScript, Python).
-    
 - Possibly store or cache board data in a lightweight DB if needed.
-    
 
 **Brief Test Plan**
 
 - E2E: Initialize a new match → Inspect board state (via API or logs) → Validate correct default state.
-    
 
 ---
 
@@ -44,21 +38,16 @@ We must enforce constraints like no overlapping ships, respecting board boundari
 **Acceptance Criteria**
 
 - Methods to place ships (of varying sizes) on the board programmatically or via user input.
-    
 - Validation of overlapping or out-of-bound ships triggers an error.
-    
 
 **Suggested Technologies**
 
 - Reuse the board data structure from Ticket #1.
-    
 - Possibly small helper library for geometry/collision checks.
-    
 
 **Brief Test Plan**
 
 - E2E: Create a new match → Place a ship → Verify correct cell states marked → Attempt invalid placement → Confirm error response.
-    
 
 ---
 
@@ -70,23 +59,17 @@ Users or AI might replay from certain setups, or we might need to save partial s
 **Acceptance Criteria**
 
 - Ability to save board configurations.
-    
 - Function to reset a board to a previous configuration or empty.
-    
 - Basic in-memory or minimal persistent storage approach.
-    
 
 **Suggested Technologies**
 
 - Key-value storage (like Redis) or minimal DB table for board states.
-    
 - Or store JSON snapshots in a file-based approach for fast iteration.
-    
 
 **Brief Test Plan**
 
 - E2E: Place multiple ships → Save state → Reset to baseline → Confirm board is empty or as expected.
-    
 
 ---
 
@@ -104,23 +87,17 @@ The turn manager handles toggling between player turns, ensuring that only the a
 **Acceptance Criteria**
 
 - A turn state that tracks the current player.
-    
 - Method to switch between players after a move.
-    
 - Data structure to store moves per turn (for potential rollbacks or logs).
-    
 
 **Suggested Technologies**
 
 - Extend server logic from Epic 1 with a turn state.
-    
 - Could store turn info in the same data model or an external data structure.
-    
 
 **Brief Test Plan**
 
 - E2E: Simulate a match with two players → Confirm turn toggles after each valid move → Turn data is recorded (e.g., move coordinates).
-    
 
 ---
 
@@ -132,23 +109,17 @@ When a player fires at a grid coordinate, we must detect hits or misses, update 
 **Acceptance Criteria**
 
 - Endpoint or method to “fire” at a grid coordinate.
-    
 - Validate hits vs. misses.
-    
 - Update board cell state accordingly (hit, miss, sunk if last cell of a ship is hit).
-    
 
 **Suggested Technologies**
 
 - Extend game board logic from Epic 1.
-    
 - Possibly use event emitters or a simple callback approach to handle UI updates.
-    
 
 **Brief Test Plan**
 
 - E2E: Player 1 fires at known ship coordinate → Confirm “hit” is returned → Board cell marked as “hit.”
-    
 
 ---
 
@@ -160,23 +131,17 @@ When all ships of an opponent are sunk, the game ends. We need a reliable mechan
 **Acceptance Criteria**
 
 - Detect if all coordinates belonging to ships are hit.
-    
 - Broadcast or log the final winner.
-    
 - Prevent further moves once a winner is determined.
-    
 
 **Suggested Technologies**
 
 - Extend or reuse ship/board data structure and add counters for hits.
-    
 - Simple state flag that flips when the game is concluded.
-    
 
 **Brief Test Plan**
 
 - E2E: Fire on all ship squares of an opponent → Confirm system returns a “Game Over” state → Further moves are rejected or no longer processed.
-    
 
 ---
 
@@ -194,23 +159,17 @@ We need a way for players to create or join matches, handle user sessions, and b
 **Acceptance Criteria**
 
 - API or UI flow to create a new match.
-    
 - Mechanism to list available matches and join.
-    
 - Generate unique match IDs, store a reference to the players in each.
-    
 
 **Suggested Technologies**
 
 - Basic REST approach or WebSocket-based approach for real-time updates.
-    
 - Minimal user session management (JWT or session cookies if needed).
-    
 
 **Brief Test Plan**
 
 - E2E: User clicks “Create Match” → Receives match ID → Another user joins → Confirm both see each other in lobby.
-    
 
 ---
 
@@ -222,21 +181,16 @@ To keep players in sync, we need a real-time or near real-time update mechanism 
 **Acceptance Criteria**
 
 - Implement push notifications for moves and board states (via WebSockets or polling).
-    
 - Clients see updated board immediately after a move.
-    
 
 **Suggested Technologies**
 
 - WebSockets (Socket.IO or similar) for real-time updates.
-    
 - Alternatively, use short-polling if simpler.
-    
 
 **Brief Test Plan**
 
 - E2E: Two players in the same match → One makes a move → Second sees board update promptly.
-    
 
 ---
 
@@ -248,23 +202,17 @@ A minimal front-end that displays the board, allows ship placement, triggers mov
 **Acceptance Criteria**
 
 - Visual representation of the board and states.
-    
 - Button or click-to-fire interactions.
-    
 - Basic feedback for hits/misses, win/loss.
-    
 
 **Suggested Technologies**
 
 - React, Vue, or simple HTML/JS for quick iteration.
-    
 - Reuse existing REST/WebSocket endpoints from the backend.
-    
 
 **Brief Test Plan**
 
 - E2E: Launch the UI → Join or create a match → Place ships → Make moves → Observe correct board rendering.
-    
 
 ---
 

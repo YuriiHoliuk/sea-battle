@@ -78,4 +78,4 @@ export const GAME_EVENTS = {
 export const CHAT_EVENTS = {
   SEND_MESSAGE: 'send_message',
   RECEIVE_MESSAGE: 'receive_message',
-}; 
+};

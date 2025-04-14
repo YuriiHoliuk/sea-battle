@@ -23,8 +23,8 @@ export const initializeSocketServer = (server: http.Server) => {
     cors: {
       origin: [SERVER_CONFIG.CLIENT_URL, SERVER_CONFIG.MOBILE_CLIENT_URL],
       methods: ['GET', 'POST'],
-      credentials: true
-    }
+      credentials: true,
+    },
   });
 
   // Socket middleware for authentication (to be implemented)
@@ -34,20 +34,20 @@ export const initializeSocketServer = (server: http.Server) => {
   });
 
   // Handle client connections
-  io.on(SocketEvents.CONNECT, (socket) => {
-    console.log(`Player connected: ${socket.id}`);
+  io.on(SocketEvents.CONNECT, socket => {
+    console.warn(`Player connected: ${socket.id}`);
 
     // Join matchmaking queue
-    socket.on(GameEvents.JOIN_GAME, (data) => {
-      console.log(`Player ${socket.id} joined matchmaking queue`);
+    socket.on(GameEvents.JOIN_GAME, () => {
+      console.warn(`Player ${socket.id} joined matchmaking queue`);
       // Implementation will be added in matchmaking service
     });
 
     // Create private game
-    socket.on(GameEvents.GAME_CREATED, (data) => {
+    socket.on(GameEvents.GAME_CREATED, () => {
       const gameId = generateGameId();
-      console.log(`Player ${socket.id} created game: ${gameId}`);
-      
+      console.warn(`Player ${socket.id} created game: ${gameId}`);
+
       // Create game session
       gameSessions.set(gameId, {
         id: gameId,
@@ -56,10 +56,10 @@ export const initializeSocketServer = (server: http.Server) => {
         created: new Date(),
         status: 'waiting',
       });
-      
+
       // Join the game room
       socket.join(gameId);
-      
+
       // Send confirmation to the client
       socket.emit(GameEvents.GAME_CREATED, { gameId });
     });
@@ -67,29 +67,29 @@ export const initializeSocketServer = (server: http.Server) => {
     // Join private game
     socket.on(GameEvents.JOIN_GAME, ({ gameId }) => {
       const game = gameSessions.get(gameId);
-      
+
       if (!game) {
         socket.emit(GameEvents.GAME_ERROR, { message: 'Game not found' });
         return;
       }
-      
+
       if (game.players.length >= 2) {
         socket.emit(GameEvents.GAME_ERROR, { message: 'Game is full' });
         return;
       }
-      
+
       // Add player to game
       game.players.push(socket.id);
-      
+
       // Join the game room
       socket.join(gameId);
-      
+
       // Notify all players
-      io.to(gameId).emit('lobby_updated', { 
-        gameId, 
-        players: game.players.length 
+      io.to(gameId).emit('lobby_updated', {
+        gameId,
+        players: game.players.length,
       });
-      
+
       // If game is full, start the game
       if (game.players.length === 2) {
         game.status = 'starting';
@@ -99,14 +99,14 @@ export const initializeSocketServer = (server: http.Server) => {
 
     // Handle disconnect
     socket.on(SocketEvents.DISCONNECT, () => {
-      console.log(`Player disconnected: ${socket.id}`);
-      
+      console.warn(`Player disconnected: ${socket.id}`);
+
       // Find games with this player and handle cleanup
       for (const [gameId, game] of gameSessions.entries()) {
         if (game.players.includes(socket.id)) {
           // Notify other players
           socket.to(gameId).emit('opponent_disconnected');
-          
+
           // If host disconnects, end the game
           if (game.host === socket.id) {
             gameSessions.delete(gameId);
@@ -127,4 +127,4 @@ export const initializeSocketServer = (server: http.Server) => {
  */
 const generateGameId = (): string => {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
-}; 
+};
