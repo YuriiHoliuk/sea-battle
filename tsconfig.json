@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@sea-battle/shared/*": ["shared/*"],
+      "@sea-battle/server/*": ["server/src/*"],
+      "@sea-battle/web/*": ["client/web/src/*"],
+      "@sea-battle/mobile/*": ["client/mobile/src/*"]
+    }
+  },
+  "exclude": ["**/node_modules", "**/dist", "**/build"]
+} 

@@ -1,0 +1,226 @@
+---
+description: Guidelines for writing and maintaining E2E tests using Playwright
+globs: tests/e2e/**/*.spec.ts
+alwaysApply: true
+---
+
+# E2E Testing with Playwright
+
+## Test Structure
+
+- **File Organization:**
+  - Place all E2E tests in `tests/e2e` directory
+  - Name test files with `.spec.ts` extension
+  - Group tests by feature/module in subdirectories
+  ```typescript
+  // tests/e2e/auth/login.spec.ts
+  import { test, expect } from '@playwright/test';
+  
+  test.describe('Login Flow', () => {
+    test('should successfully log in with valid credentials', async ({ page }) => {
+      // Test implementation
+    });
+  });
+  ```
+
+- **Test File Naming:**
+  - Use descriptive names: `{feature}.spec.ts`
+  - For complex features, split into multiple files:
+    - `login-success.spec.ts`
+    - `login-errors.spec.ts`
+
+## Writing Tests
+
+- **Test Structure:**
+  ```typescript
+  test.describe('Feature Name', () => {
+    test.beforeEach(async ({ page }) => {
+      // Setup code
+    });
+
+    test('should do something specific', async ({ page }) => {
+      // Arrange
+      // Act
+      // Assert
+    });
+  });
+  ```
+
+- **Best Practices:**
+  - One assertion per test when possible
+  - Use page objects for reusable selectors and actions
+  - Implement proper waiting strategies
+  - Clean up test data after tests
+  - Use test isolation
+
+- **Page Objects:**
+  ```typescript
+  // tests/e2e/pages/login.page.ts
+  export class LoginPage {
+    constructor(private page: Page) {}
+    
+    async login(username: string, password: string) {
+      await this.page.fill('[data-testid=username]', username);
+      await this.page.fill('[data-testid=password]', password);
+      await this.page.click('[data-testid=submit]');
+    }
+  }
+  ```
+
+## Test Plan Structure
+
+When creating test plans for tasks without them, follow this format:
+
+```typescript
+// Example test plan in task details
+testStrategy: `
+E2E Tests Required:
+1. Happy Path:
+   - Test: Verify successful completion of [feature]
+   - Steps: 
+     1. [Step 1]
+     2. [Step 2]
+   - Expected: [Expected outcome]
+
+2. Error Cases:
+   - Test: Verify error handling for [scenario]
+   - Steps:
+     1. [Step 1]
+     2. [Step 2]
+   - Expected: [Error message/behavior]
+
+3. Edge Cases:
+   - Test: Verify behavior with [edge case]
+   - Steps and expectations...
+`
+```
+
+## Running Tests
+
+- **Commands:**
+  ```bash
+  # Run all tests
+  npm run test:e2e
+  
+  # Run specific test file
+  npm run test:e2e tests/e2e/auth/login.spec.ts
+  
+  # Run in headed mode
+  npm run test:e2e -- --headed
+  
+  # Run with specific browser
+  npm run test:e2e -- --project=chromium
+  ```
+
+- **CI Integration:**
+  - Configure GitHub Actions to run E2E tests
+  - Use Playwright's Docker images
+  - Set up test reporting and artifacts
+
+## Test Data Management
+
+- **Fixtures:**
+  ```typescript
+  // tests/e2e/fixtures/users.ts
+  export const testUsers = {
+    admin: {
+      username: 'admin@example.com',
+      password: 'test123'
+    }
+  };
+  ```
+
+- **API Helpers:**
+  ```typescript
+  // tests/e2e/helpers/api.ts
+  export async function createTestData(request: APIRequestContext) {
+    // Setup test data via API
+  }
+  ```
+
+## Visual Testing
+
+- Use Playwright's built-in snapshot testing
+- Configure threshold for pixel differences
+- Store snapshots in version control
+```typescript
+test('visual regression', async ({ page }) => {
+  await expect(page).toHaveScreenshot('homepage.png');
+});
+```
+
+## Debugging
+
+- Use `await page.pause()` for debugging
+- Enable video recording for failed tests
+- Use trace viewer for detailed analysis
+```typescript
+test.use({ video: 'retain-on-failure' });
+```
+
+## Common Patterns
+
+- **Authentication:**
+  ```typescript
+  // tests/e2e/helpers/auth.ts
+  export async function loginAsUser(page: Page, user: TestUser) {
+    // Login implementation
+  }
+  ```
+
+- **Data Verification:**
+  ```typescript
+  // Verify element states
+  await expect(page.getByTestId('status')).toHaveText('Success');
+  await expect(page.getByRole('button')).toBeEnabled();
+  ```
+
+- **Waiting Strategies:**
+  ```typescript
+  // Wait for network idle
+  await page.waitForLoadState('networkidle');
+  
+  // Wait for specific response
+  await page.waitForResponse(response => 
+    response.url().includes('/api/data') && 
+    response.status() === 200
+  );
+  ```
+
+## Accessibility Testing
+
+- Include accessibility checks in E2E tests
+```typescript
+test('page should be accessible', async ({ page }) => {
+  await page.goto('/');
+  const violations = await new AxeBuilder({ page }).analyze();
+  expect(violations.length).toBe(0);
+});
+```
+
+## Performance Testing
+
+- Measure key metrics in E2E tests
+```typescript
+test('performance metrics', async ({ page }) => {
+  const metrics = await page.evaluate(() => 
+    JSON.stringify(performance.getEntriesByType('navigation'))
+  );
+  expect(JSON.parse(metrics)[0].duration).toBeLessThan(3000);
+});
+```
+
+## Reporting
+
+- Configure HTML reporter
+- Set up test analytics
+- Integrate with CI/CD dashboards
+```typescript
+// playwright.config.ts
+export default defineConfig({
+  reporter: [
+    ['html'],
+    ['junit', { outputFile: 'results.xml' }]
+  ]
+});
+``` 

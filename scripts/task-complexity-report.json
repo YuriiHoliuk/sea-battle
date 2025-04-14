@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "generatedAt": "2025-04-14T11:48:40.633Z",
+    "tasksAnalyzed": 10,
+    "thresholdScore": 5,
+    "projectName": "Your Project Name",
+    "usedResearch": false
+  },
+  "complexityAnalysis": [
+    {
+      "taskId": 1,
+      "taskTitle": "Setup Project Repository and Base Architecture",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down the project repository setup into specific subtasks covering repository initialization, folder structure creation, environment configuration, build setup, code quality tools, and CI/CD pipeline implementation.",
+      "reasoning": "This task involves multiple technical components including monorepo setup, Docker configuration, dependency management, code quality tools, and CI/CD pipelines. Each component requires specific expertise and configuration, making it a moderately complex foundation task."
+    },
+    {
+      "taskId": 2,
+      "taskTitle": "Implement Game Grid and Ship Placement Logic",
+      "complexityScore": 6,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Divide the game grid and ship placement implementation into subtasks covering grid representation, ship class creation, placement validation logic, rotation functionality, and the UI components for placement.",
+      "reasoning": "This task requires creating core game mechanics with both frontend and backend components. The complexity comes from implementing validation rules, ship placement logic, and ensuring the UI properly interacts with the underlying game model."
+    },
+    {
+      "taskId": 3,
+      "taskTitle": "Develop Turn-Based Combat System",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down the turn-based combat system into subtasks covering coordinate selection, hit/miss detection, damage tracking, ship sinking logic, victory condition checking, and combat animations.",
+      "reasoning": "This task involves complex game state management, including tracking hits/misses, ship damage, and victory conditions. The need for animations and server-side validation adds additional complexity layers."
+    },
+    {
+      "taskId": 4,
+      "taskTitle": "Build Real-Time Multiplayer Infrastructure",
+      "complexityScore": 8,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Divide the multiplayer infrastructure implementation into subtasks covering WebSocket setup, session management, turn management, state synchronization, timeout handling, reconnection logic, and security measures.",
+      "reasoning": "Real-time multiplayer features are inherently complex, requiring robust WebSocket implementation, state synchronization, and handling edge cases like disconnections. This is one of the most technically challenging aspects of the project."
+    },
+    {
+      "taskId": 5,
+      "taskTitle": "Develop Matchmaking Service",
+      "complexityScore": 9,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Break down the matchmaking service into subtasks covering queue implementation, rating algorithm development, private lobby creation, invitation system, timeout handling, scaling architecture, and performance optimization.",
+      "reasoning": "This task requires advanced distributed systems knowledge to create a scalable matchmaking service. The ELO rating system, Redis integration, and microservice architecture make this particularly complex, especially with the requirement to handle thousands of concurrent users."
+    },
+    {
+      "taskId": 6,
+      "taskTitle": "Implement AI for Single-Player Mode",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Divide the AI implementation into subtasks covering basic random-move AI, probability-based medium AI, advanced algorithm implementation, performance optimization, and AI personality traits.",
+      "reasoning": "Developing multiple AI difficulty levels with advanced algorithms like Monte Carlo simulation requires significant algorithm design and optimization work. The personality traits and ensuring acceptable response times add additional complexity."
+    },
+    {
+      "taskId": 7,
+      "taskTitle": "Create User Authentication and Profile System",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down the authentication system into subtasks covering secure JWT implementation, password management, user registration flow, profile management, database setup, and social login integration.",
+      "reasoning": "Authentication systems require careful implementation for security. The combination of JWT, bcrypt, email verification, PostgreSQL, Redis caching, and social login options creates a moderately complex task with security implications."
+    },
+    {
+      "taskId": 8,
+      "taskTitle": "Implement Player Progression and Achievements System",
+      "complexityScore": 6,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Divide the progression system into subtasks covering statistics tracking database design, achievement trigger implementation, leaderboard functionality, level progression mechanics, and UI components for displaying achievements.",
+      "reasoning": "This task involves database design, trigger systems, and UI components. While not the most technically challenging, it requires careful integration with existing game mechanics and thoughtful UX design for displaying achievements."
+    },
+    {
+      "taskId": 9,
+      "taskTitle": "Develop Customization and Cosmetic Systems",
+      "complexityScore": 5,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the customization system into subtasks covering cosmetic item management, virtual currency implementation, inventory system, UI for browsing cosmetics, and visual effect creation for premium items.",
+      "reasoning": "This task is primarily focused on UI/UX design and inventory management. While it involves multiple components, they are relatively straightforward compared to other tasks in the project."
+    },
+    {
+      "taskId": 10,
+      "taskTitle": "Cross-Platform Testing and Optimization",
+      "complexityScore": 8,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Divide the testing and optimization process into subtasks covering web browser testing, mobile device testing, performance optimization, responsive design implementation, accessibility testing, load testing, and network optimization.",
+      "reasoning": "Comprehensive cross-platform testing is highly complex due to the variety of environments, performance considerations, and accessibility requirements. The load testing requirement for 5,000 concurrent matches and strict latency requirements add significant complexity."
+    }
+  ]
+}
