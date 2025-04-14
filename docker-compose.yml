@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: client/web/Dockerfile.dev
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./client/web/src:/app/client/web/src
+      - ./shared:/app/shared
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://server:3000
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile.dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./server/src:/app/server/src
+      - ./shared:/app/shared
+    environment:
+      - NODE_ENV=development
+      - CLIENT_URL=http://client:5173
+    env_file:
+      - .env
+
+networks:
+  default:
+    name: sea-battle-network

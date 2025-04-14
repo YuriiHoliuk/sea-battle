@@ -1,0 +1,28 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files 
+COPY package.json .
+COPY yarn.lock .
+
+# Copy workspace files needed for installation
+COPY client/web/package.json ./client/web/
+COPY shared/package.json ./shared/
+
+# Install dependencies
+RUN yarn install
+
+# Copy client source code
+COPY client/web/ ./client/web/
+COPY shared/ ./shared/
+COPY tsconfig.json .
+
+# Expose the development port
+EXPOSE 5173
+
+# Set working directory to web client
+WORKDIR /app/client/web
+
+# Start the development server
+CMD ["yarn", "dev", "--host"] 

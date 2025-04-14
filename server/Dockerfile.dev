@@ -1,0 +1,28 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json .
+COPY yarn.lock .
+
+# Copy workspace files needed for installation
+COPY server/package.json ./server/
+COPY shared/package.json ./shared/
+
+# Install dependencies
+RUN yarn install
+
+# Copy server source code
+COPY server/ ./server/
+COPY shared/ ./shared/
+COPY tsconfig.json .
+
+# Expose the server port
+EXPOSE 3000
+
+# Set working directory to server
+WORKDIR /app/server
+
+# Start the development server with nodemon
+CMD ["yarn", "dev"] 

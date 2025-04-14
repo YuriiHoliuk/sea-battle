@@ -65,6 +65,41 @@ sea-battle/
    yarn dev
    ```
 
+### Docker Development Environment
+
+You can also run the application using Docker for a consistent development environment:
+
+1. Make sure Docker and Docker Compose are installed on your system.
+
+2. Start the Docker development environment:
+
+   ```
+   docker-compose up
+   ```
+
+3. The application will be available at:
+
+   - Web client: http://localhost:5173
+   - Server API: http://localhost:3000
+
+4. To rebuild the containers after making changes to dependencies:
+
+   ```
+   docker-compose up --build
+   ```
+
+5. To stop the containers:
+   ```
+   docker-compose down
+   ```
+
+The Docker setup includes:
+
+- Hot-reloading for both client and server code
+- Shared volume mounts for real-time development
+- Proper networking between services
+- Environment variable configuration
+
 ## Project Roadmap
 
 1. Setup project repository and base architecture
