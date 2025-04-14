@@ -1,0 +1,133 @@
+/* GameGrid Component Styles */
+.game-grid-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-with-row-labels {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-grid {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #444;
+  background-color: #1e2a38;
+}
+
+.grid-row {
+  display: flex;
+}
+
+.grid-cell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #555;
+  transition: background-color 0.2s;
+}
+
+.grid-cell.empty {
+  background-color: #2a3b4c;
+}
+
+.grid-cell.ship {
+  background-color: #3d5a80;
+}
+
+.grid-cell.hit {
+  background-color: #e63946;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-cell.hit::after {
+  content: "×";
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.grid-cell.miss {
+  background-color: #457b9d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-cell.miss::after {
+  content: "•";
+  font-size: 1.5rem;
+  color: white;
+}
+
+.grid-cell:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+/* Grid labels */
+.column-labels, .row-labels {
+  display: flex;
+}
+
+.column-labels {
+  flex-direction: row;
+  margin-bottom: 4px;
+}
+
+.row-labels {
+  flex-direction: column;
+  margin-right: 8px;
+}
+
+.grid-label {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #adb5bd;
+  font-size: 0.9rem;
+}
+
+.column-label {
+  height: 20px;
+}
+
+.row-label {
+  width: 20px;
+}
+
+.corner-spacer {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .grid-cell, .grid-label {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .column-label {
+    height: 20px;
+  }
+  
+  .row-label {
+    width: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .grid-cell, .grid-label {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .grid-label {
+    font-size: 0.8rem;
+  }
+} 

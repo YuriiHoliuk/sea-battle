@@ -89,7 +89,7 @@ export class Grid {
     const validationResult = validator.validateShipPlacement(ship);
     this.lastPlacementResult = validationResult;
 
-    if (!validationResult.valid) {
+    if (!validationResult.isValid) {
       return false;
     }
 
@@ -125,7 +125,7 @@ export class Grid {
       this.adjacentShipsAllowed
     );
 
-    return validator.validateShipPlacement(ship).valid;
+    return validator.validateShipPlacement(ship).isValid;
   }
 
   /**

@@ -33,7 +33,7 @@ describe('ShipPlacementValidator', () => {
 
       const result = validator.validateShipPlacement(ship);
 
-      expect(result.valid).toBe(true);
+      expect(result.isValid).toBe(true);
       expect(result.errorCode).toBeUndefined();
       expect(result.errorMessage).toBeUndefined();
     });
@@ -46,7 +46,7 @@ describe('ShipPlacementValidator', () => {
 
       const result = validator.validateShipPlacement(ship);
 
-      expect(result.valid).toBe(false);
+      expect(result.isValid).toBe(false);
       expect(result.errorCode).toBe(ShipPlacementErrorCode.OUTSIDE_GRID);
       expect(result.errorMessage).toBeDefined();
     });
@@ -59,7 +59,7 @@ describe('ShipPlacementValidator', () => {
 
       const result = validator.validateShipPlacement(ship);
 
-      expect(result.valid).toBe(false);
+      expect(result.isValid).toBe(false);
       expect(result.errorCode).toBe(ShipPlacementErrorCode.OUTSIDE_GRID);
       expect(result.errorMessage).toBeDefined();
     });
@@ -82,7 +82,7 @@ describe('ShipPlacementValidator', () => {
 
       const result = validator.validateShipPlacement(ship);
 
-      expect(result.valid).toBe(false);
+      expect(result.isValid).toBe(false);
       expect(result.errorCode).toBe(ShipPlacementErrorCode.OVERLAPPING);
       expect(result.errorMessage).toBeDefined();
     });
@@ -99,7 +99,7 @@ describe('ShipPlacementValidator', () => {
 
       const result = validator.validateShipPlacement(ship);
 
-      expect(result.valid).toBe(false);
+      expect(result.isValid).toBe(false);
       expect(result.errorCode).toBe(ShipPlacementErrorCode.INVALID_ORIENTATION);
       expect(result.errorMessage).toBeDefined();
     });
@@ -115,7 +115,7 @@ describe('ShipPlacementValidator', () => {
 
       const result = validator.validateShipPlacement(sameTypeShip);
 
-      expect(result.valid).toBe(false);
+      expect(result.isValid).toBe(false);
       expect(result.errorCode).toBe(ShipPlacementErrorCode.ALREADY_PLACED);
       expect(result.errorMessage).toBeDefined();
     });
@@ -130,7 +130,7 @@ describe('ShipPlacementValidator', () => {
 
       const result = validator.validateShipPlacement(ship);
 
-      expect(result.valid).toBe(false);
+      expect(result.isValid).toBe(false);
       expect(result.errorCode).toBe(ShipPlacementErrorCode.OUTSIDE_GRID);
       expect(result.errorMessage).toBeDefined();
     });
@@ -154,7 +154,7 @@ describe('ShipPlacementValidator', () => {
 
       const result = validator.validateShipPlacement(ship);
 
-      expect(result.valid).toBe(false);
+      expect(result.isValid).toBe(false);
       expect(result.errorCode).toBe(ShipPlacementErrorCode.ADJACENT_SHIPS);
       expect(result.errorMessage).toBeDefined();
     });
@@ -178,7 +178,7 @@ describe('ShipPlacementValidator', () => {
 
       const result = validator.validateShipPlacement(ship);
 
-      expect(result.valid).toBe(true);
+      expect(result.isValid).toBe(true);
       expect(result.errorCode).toBeUndefined();
       expect(result.errorMessage).toBeUndefined();
     });
@@ -201,22 +201,22 @@ describe('ShipPlacementValidator', () => {
         // Test horizontal placement at edge
         const horizontalShip = createShip(type, 10 - size, 0, Orientation.HORIZONTAL);
         const horizontalResult = freshValidator.validateShipPlacement(horizontalShip);
-        expect(horizontalResult.valid).toBe(true);
+        expect(horizontalResult.isValid).toBe(true);
 
         // Test vertical placement at edge
         const verticalShip = createShip(type, 0, 10 - size, Orientation.VERTICAL);
         const verticalResult = freshValidator.validateShipPlacement(verticalShip);
-        expect(verticalResult.valid).toBe(true);
+        expect(verticalResult.isValid).toBe(true);
 
         // Test invalid horizontal placement (outside grid)
         const invalidHorizontalShip = createShip(type, 10 - size + 1, 0, Orientation.HORIZONTAL);
         const invalidHorizontalResult = freshValidator.validateShipPlacement(invalidHorizontalShip);
-        expect(invalidHorizontalResult.valid).toBe(false);
+        expect(invalidHorizontalResult.isValid).toBe(false);
 
         // Test invalid vertical placement (outside grid)
         const invalidVerticalShip = createShip(type, 0, 10 - size + 1, Orientation.VERTICAL);
         const invalidVerticalResult = freshValidator.validateShipPlacement(invalidVerticalShip);
-        expect(invalidVerticalResult.valid).toBe(false);
+        expect(invalidVerticalResult.isValid).toBe(false);
       });
     });
   });

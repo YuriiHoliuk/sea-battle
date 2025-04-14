@@ -5,7 +5,7 @@ import { Ship as ShipClass } from './Ship';
  * Type for validation result including success status and error message
  */
 export interface ValidationResult {
-  valid: boolean;
+  isValid: boolean;
   errorCode?: ShipPlacementErrorCode;
   errorMessage?: string;
 }
@@ -58,7 +58,7 @@ export class ShipPlacementValidator {
     // Check for already placed ships of the same type
     if (this.ships.some(s => s.type === ship.type && s.id !== ship.id)) {
       return {
-        valid: false,
+        isValid: false,
         errorCode: ShipPlacementErrorCode.ALREADY_PLACED,
         errorMessage: `A ${ship.type} has already been placed on the grid`,
       };
@@ -67,7 +67,7 @@ export class ShipPlacementValidator {
     // Check if orientation is valid
     if (ship.orientation !== 'horizontal' && ship.orientation !== 'vertical') {
       return {
-        valid: false,
+        isValid: false,
         errorCode: ShipPlacementErrorCode.INVALID_ORIENTATION,
         errorMessage: 'Ship orientation must be horizontal or vertical',
       };
@@ -79,7 +79,7 @@ export class ShipPlacementValidator {
     const outsidePosition = positions.find(pos => !this.isValidPosition(pos));
     if (outsidePosition) {
       return {
-        valid: false,
+        isValid: false,
         errorCode: ShipPlacementErrorCode.OUTSIDE_GRID,
         errorMessage: `Ship placement at (${ship.position.x}, ${ship.position.y}) would place part of the ship outside the grid`,
       };
@@ -89,7 +89,7 @@ export class ShipPlacementValidator {
     const overlappingPosition = positions.find(pos => this.grid[pos.y][pos.x] === CellState.SHIP);
     if (overlappingPosition) {
       return {
-        valid: false,
+        isValid: false,
         errorCode: ShipPlacementErrorCode.OVERLAPPING,
         errorMessage: `Ship overlaps with another ship at position (${overlappingPosition.x}, ${overlappingPosition.y})`,
       };
@@ -100,7 +100,7 @@ export class ShipPlacementValidator {
       const adjacentToOtherShip = positions.some(pos => this.hasAdjacentShip(pos));
       if (adjacentToOtherShip) {
         return {
-          valid: false,
+          isValid: false,
           errorCode: ShipPlacementErrorCode.ADJACENT_SHIPS,
           errorMessage:
             'Ship is adjacent to another ship. Ships must have at least one cell spacing between them',
@@ -109,7 +109,7 @@ export class ShipPlacementValidator {
     }
 
     // All checks passed
-    return { valid: true };
+    return { isValid: true };
   }
 
   /**

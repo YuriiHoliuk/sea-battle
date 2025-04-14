@@ -214,7 +214,7 @@ describe('Grid', () => {
 
       // Check the error code for adjacent ships
       const result = gridWithoutAdjacent.getLastPlacementResult();
-      expect(result?.valid).toBe(false);
+      expect(result?.isValid).toBe(false);
       expect(result?.errorCode).toBe(ShipPlacementErrorCode.ADJACENT_SHIPS);
     });
   });
@@ -236,7 +236,7 @@ describe('Grid', () => {
 
       // Verify last placement result is valid
       const result = grid.getLastPlacementResult();
-      expect(result?.valid).toBe(true);
+      expect(result?.isValid).toBe(true);
     });
 
     it('should not place a ship that overlaps with existing ships', () => {
@@ -255,7 +255,7 @@ describe('Grid', () => {
 
       // Verify last placement result has correct error
       const result = grid.getLastPlacementResult();
-      expect(result?.valid).toBe(false);
+      expect(result?.isValid).toBe(false);
       expect(result?.errorCode).toBe(ShipPlacementErrorCode.OVERLAPPING);
     });
 
@@ -269,7 +269,7 @@ describe('Grid', () => {
 
       // Verify last placement result has correct error
       const result = grid.getLastPlacementResult();
-      expect(result?.valid).toBe(false);
+      expect(result?.isValid).toBe(false);
       expect(result?.errorCode).toBe(ShipPlacementErrorCode.OUTSIDE_GRID);
     });
 
@@ -286,7 +286,7 @@ describe('Grid', () => {
 
       // Verify last placement result has correct error
       const result = grid.getLastPlacementResult();
-      expect(result?.valid).toBe(false);
+      expect(result?.isValid).toBe(false);
       expect(result?.errorCode).toBe(ShipPlacementErrorCode.INVALID_ORIENTATION);
     });
 
@@ -310,7 +310,7 @@ describe('Grid', () => {
 
       // Verify last placement result has correct error
       const result = grid.getLastPlacementResult();
-      expect(result?.valid).toBe(false);
+      expect(result?.isValid).toBe(false);
       expect(result?.errorCode).toBe(ShipPlacementErrorCode.ALREADY_PLACED);
     });
 
@@ -370,7 +370,7 @@ describe('Grid', () => {
       expect(grid.placeShip(carrier)).toBe(false);
 
       const result = grid.getLastPlacementResult();
-      expect(result?.valid).toBe(false);
+      expect(result?.isValid).toBe(false);
       expect(result?.errorCode).toBe(ShipPlacementErrorCode.OUTSIDE_GRID);
     });
   });
@@ -383,7 +383,7 @@ describe('Grid', () => {
       grid.placeShip(ship1);
 
       let result = grid.getLastPlacementResult();
-      expect(result?.valid).toBe(true);
+      expect(result?.isValid).toBe(true);
 
       // Place an invalid ship of a different type
       const ship2 = createShip('2', ShipType.DESTROYER, { x: 9, y: 0 }, Orientation.HORIZONTAL);
@@ -391,7 +391,7 @@ describe('Grid', () => {
       grid.placeShip(ship2);
 
       result = grid.getLastPlacementResult();
-      expect(result?.valid).toBe(false);
+      expect(result?.isValid).toBe(false);
       expect(result?.errorCode).toBe(ShipPlacementErrorCode.OUTSIDE_GRID);
     });
 

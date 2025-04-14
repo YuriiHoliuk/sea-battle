@@ -1,0 +1,140 @@
+/* Ship Component Styles */
+.ship-component {
+  display: flex;
+  position: relative;
+  padding: 4px;
+  border-radius: 4px;
+  background-color: #324b6c;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 8px;
+  user-select: none;
+}
+
+.ship-component:not(.placed) {
+  cursor: grab;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ship-component:not(.placed):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.ship-component:not(.placed):active {
+  cursor: grabbing;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Orientation styles */
+.ship-horizontal {
+  flex-direction: row;
+}
+
+.ship-vertical {
+  flex-direction: column;
+}
+
+/* Ship cell */
+.ship-cell {
+  width: 38px;
+  height: 38px;
+  background-color: #3d5a80;
+  border: 1px solid #5d7da8;
+  margin: 1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ship type-specific styles */
+.ship-carrier {
+  background-color: #324b6c;
+}
+
+.ship-battleship {
+  background-color: #3a547a;
+}
+
+.ship-cruiser {
+  background-color: #435d88;
+}
+
+.ship-submarine {
+  background-color: #4b6796;
+}
+
+.ship-destroyer {
+  background-color: #5470a4;
+}
+
+/* Ship hit marker */
+.ship-hit-marker {
+  color: #e63946;
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Ship info label */
+.ship-info {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  display: flex;
+  gap: 6px;
+}
+
+.ship-component:hover .ship-info {
+  opacity: 1;
+}
+
+.ship-name {
+  text-transform: capitalize;
+}
+
+.ship-size {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+/* Ship placement animation */
+.ship-component.placed {
+  animation: place-ship 0.5s ease-out;
+}
+
+@keyframes place-ship {
+  0% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: none;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ship-cell {
+    width: 32px;
+    height: 32px;
+  }
+} 

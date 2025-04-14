@@ -83,4 +83,48 @@ footer {
   margin-top: 2rem;
   font-size: 0.8rem;
   color: #888;
+}
+
+/* Waiting screen */
+.waiting-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #1e2a38;
+  border-radius: 8px;
+  max-width: 500px;
+}
+
+.waiting-screen h2 {
+  color: #ffd166;
+  margin-bottom: 2rem;
+}
+
+.reset-button {
+  padding: 0.8rem 1.5rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.reset-button:hover {
+  background-color: #5a6268;
+}
+
+.reset-button:active {
+  transform: translateY(1px);
+}
+
+/* Status formatting */
+.status span {
+  text-transform: capitalize;
+  color: #ffd166;
+  font-weight: bold;
 } 

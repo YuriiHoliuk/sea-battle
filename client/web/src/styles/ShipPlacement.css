@@ -1,0 +1,238 @@
+/* Ship Placement Page Styles */
+.ship-placement-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.ship-placement-page h1 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.instructions {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #888;
+}
+
+.error-message {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.placement-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Grid styles */
+.ship-placement-grid {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #444;
+  background-color: #1e2a38;
+}
+
+.grid-row {
+  display: flex;
+}
+
+.grid-cell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #555;
+  transition: background-color 0.2s;
+}
+
+.grid-cell.empty {
+  background-color: #2a3b4c;
+}
+
+.grid-cell.ship {
+  background-color: #3d5a80;
+}
+
+.grid-cell:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+/* Side panel styles */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 300px;
+}
+
+.ships-container {
+  background-color: #2a3b4c;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.ships-container h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.ship-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Ship styles */
+.ship {
+  display: flex;
+  position: relative;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #324b6c;
+  cursor: grab;
+  user-select: none;
+}
+
+.ship:active {
+  cursor: grabbing;
+}
+
+.ship-horizontal {
+  flex-direction: row;
+  width: fit-content;
+}
+
+.ship-vertical {
+  flex-direction: column;
+  height: fit-content;
+}
+
+.ship-cell {
+  width: 30px;
+  height: 30px;
+  background-color: #3d5a80;
+  border: 1px solid #5d7da8;
+}
+
+.ship-label {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.ship-horizontal .ship-label {
+  bottom: auto;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+}
+
+/* Ship type-specific styles */
+.ship-carrier {
+  background-color: #324b6c;
+}
+
+.ship-battleship {
+  background-color: #3a547a;
+}
+
+.ship-cruiser {
+  background-color: #435d88;
+}
+
+.ship-submarine {
+  background-color: #4b6796;
+}
+
+.ship-destroyer {
+  background-color: #5470a4;
+}
+
+/* All placed message */
+.all-placed-message {
+  text-align: center;
+  color: #ffd166;
+  font-weight: bold;
+  background-color: #2a3b4c;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+/* Control buttons */
+.placement-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.reset-button, .confirm-button {
+  flex: 1;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.reset-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+.reset-button:hover {
+  background-color: #5a6268;
+}
+
+.confirm-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.confirm-button:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.confirm-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.reset-button:active, .confirm-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .placement-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .grid-cell {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .side-panel {
+    min-width: auto;
+    width: 100%;
+  }
+} 

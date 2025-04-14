@@ -14,5 +14,12 @@ export * from './constants/game';
 export * from './utils/grid';
 export * from './utils/gameHelpers';
 
-// Export game classes
-export * from './src/game';
+// Export game classes explicitly to avoid name conflicts with types
+export { Grid as GridImpl } from './src/game/Grid';
+export { Ship as ShipImpl } from './src/game/Ship';
+export { ShipFactory } from './src/game/ShipFactory';
+export {
+  ShipPlacementValidator,
+  ValidationResult,
+  ShipPlacementErrorCode,
+} from './src/game/ShipPlacementValidator';
