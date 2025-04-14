@@ -313,6 +313,66 @@ describe('Grid', () => {
       expect(result?.valid).toBe(false);
       expect(result?.errorCode).toBe(ShipPlacementErrorCode.ALREADY_PLACED);
     });
+
+    it('should handle ship rotation during placement', () => {
+      const ship = new Ship(ShipType.DESTROYER, { x: 0, y: 0 }, Orientation.HORIZONTAL);
+
+      // Initial placement in horizontal orientation
+      expect(grid.placeShip(ship)).toBe(true);
+
+      // Cells should be marked as ships
+      expect(grid.getCellState({ x: 0, y: 0 })).toBe(CellState.SHIP);
+      expect(grid.getCellState({ x: 1, y: 0 })).toBe(CellState.SHIP);
+
+      // Reset grid for next test
+      grid.reset();
+
+      // Rotate ship to vertical before placement
+      ship.rotate();
+      expect(ship.orientation).toBe(Orientation.VERTICAL);
+
+      // Place in vertical orientation
+      expect(grid.placeShip(ship)).toBe(true);
+
+      // Cells should be marked as ships in vertical orientation
+      expect(grid.getCellState({ x: 0, y: 0 })).toBe(CellState.SHIP);
+      expect(grid.getCellState({ x: 0, y: 1 })).toBe(CellState.SHIP);
+    });
+
+    it('should reject rotated ship placement when it would go out of bounds', () => {
+      const ship = new Ship(ShipType.DESTROYER, { x: 9, y: 8 }, Orientation.HORIZONTAL);
+
+      // Ship in horizontal orientation at the edge would be partly out of bounds
+      expect(grid.placeShip(ship)).toBe(false);
+
+      // Rotate to vertical, which would fit
+      ship.rotate();
+      expect(ship.orientation).toBe(Orientation.VERTICAL);
+
+      // Now placement should be valid
+      expect(grid.placeShip(ship)).toBe(true);
+
+      // Reset grid for next test
+      grid.reset();
+
+      // Test with a carrier (size 5)
+      const carrier = new Ship(ShipType.CARRIER, { x: 5, y: 7 }, Orientation.HORIZONTAL);
+      expect(grid.placeShip(carrier)).toBe(true); // Fits horizontally
+
+      // Reset grid
+      grid.reset();
+
+      // Rotate carrier to vertical
+      carrier.rotate();
+      carrier.position = { x: 5, y: 7 };
+
+      // Would go out of bounds vertically from position y=7
+      expect(grid.placeShip(carrier)).toBe(false);
+
+      const result = grid.getLastPlacementResult();
+      expect(result?.valid).toBe(false);
+      expect(result?.errorCode).toBe(ShipPlacementErrorCode.OUTSIDE_GRID);
+    });
   });
 
   describe('getLastPlacementResult', () => {

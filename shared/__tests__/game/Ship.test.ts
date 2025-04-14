@@ -158,4 +158,83 @@ describe('Ship', () => {
     expect(deserializedShip.hits).toEqual(originalShip.hits);
     expect(deserializedShip.isSunk).toBe(originalShip.isSunk);
   });
+
+  test('should rotate the ship between horizontal and vertical orientations', () => {
+    const ship = new Ship(ShipType.DESTROYER, { x: 3, y: 3 }, Orientation.HORIZONTAL);
+
+    // Initially horizontal
+    expect(ship.orientation).toBe(Orientation.HORIZONTAL);
+
+    // Occupied positions should be horizontal (x changes, y stays the same)
+    let positions = ship.getOccupiedPositions();
+    expect(positions).toEqual([
+      { x: 3, y: 3 },
+      { x: 4, y: 3 },
+    ]);
+
+    // Rotate to vertical
+    ship.rotate();
+    expect(ship.orientation).toBe(Orientation.VERTICAL);
+
+    // Occupied positions should now be vertical (x stays the same, y changes)
+    positions = ship.getOccupiedPositions();
+    expect(positions).toEqual([
+      { x: 3, y: 3 },
+      { x: 3, y: 4 },
+    ]);
+
+    // Rotate back to horizontal
+    ship.rotate();
+    expect(ship.orientation).toBe(Orientation.HORIZONTAL);
+  });
+
+  test('should update occupied positions after rotation', () => {
+    const ship = new Ship(ShipType.CARRIER, { x: 2, y: 2 }, Orientation.HORIZONTAL);
+
+    // Initially horizontal
+    let positions = ship.getOccupiedPositions();
+    expect(positions).toEqual([
+      { x: 2, y: 2 },
+      { x: 3, y: 2 },
+      { x: 4, y: 2 },
+      { x: 5, y: 2 },
+      { x: 6, y: 2 },
+    ]);
+
+    // Rotate to vertical
+    ship.rotate();
+
+    // Now positions should be vertical
+    positions = ship.getOccupiedPositions();
+    expect(positions).toEqual([
+      { x: 2, y: 2 },
+      { x: 2, y: 3 },
+      { x: 2, y: 4 },
+      { x: 2, y: 5 },
+      { x: 2, y: 6 },
+    ]);
+  });
+
+  test('should integrate with hit tracking when rotated', () => {
+    const ship = new Ship(ShipType.DESTROYER, { x: 3, y: 3 }, Orientation.HORIZONTAL);
+
+    // Register hit on horizontal position
+    ship.registerHit({ x: 3, y: 3 });
+    expect(ship.hits).toEqual([{ x: 3, y: 3 }]);
+    expect(ship.isSunk).toBe(false);
+
+    // Rotate ship
+    ship.rotate();
+
+    // Hit should still be registered and positions updated
+    expect(ship.hits).toEqual([{ x: 3, y: 3 }]);
+
+    // Register hit on new vertical position
+    ship.registerHit({ x: 3, y: 4 });
+    expect(ship.hits).toEqual([
+      { x: 3, y: 3 },
+      { x: 3, y: 4 },
+    ]);
+    expect(ship.isSunk).toBe(true); // Ship should now be sunk
+  });
 });
