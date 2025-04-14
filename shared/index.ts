@@ -13,3 +13,6 @@ export * from './constants/game';
 // Export all utilities
 export * from './utils/grid';
 export * from './utils/gameHelpers';
+
+// Export game classes
+export * from './src/game';
