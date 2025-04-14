@@ -1,5 +1,9 @@
 # Sea Battle
 
+[![CI/CD Pipeline](https://github.com/username/sea-battle/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/username/sea-battle/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Yarn Workspaces](https://img.shields.io/badge/Yarn-Workspaces-2C8EBB)](https://classic.yarnpkg.com/en/docs/workspaces/)
+
 A multiplayer online Sea Battle game with both web and mobile clients, supporting real-time gameplay and matchmaking.
 
 ## Project Structure
@@ -100,95 +104,57 @@ The Docker setup includes:
 - Proper networking between services
 - Environment variable configuration
 
-## Production Deployment
+## Continuous Integration and Deployment
 
-### Prerequisites
+The project uses GitHub Actions for continuous integration and deployment with the following workflow:
 
-- A Linux server with Docker and Docker Compose installed
-- Git access to the repository
-- Domain name (optional)
+1. **Testing**: Runs linting and unit tests for all packages
+2. **Building**: Builds the application and creates artifacts
+3. **Docker**: Builds and pushes Docker images to the registry
+4. **Staging Deployment**: Automatically deploys to the staging environment
+5. **Production Deployment**: Deploys to production after approval
 
-### Deployment Steps
+The CI/CD pipeline ensures:
 
-1. Clone the repository to your production server:
+- Code quality through automated testing
+- Consistent builds across environments
+- Automated deployments to staging for immediate testing
+- Controlled deployments to production with manual approval
+- Proper versioning of Docker images
 
-   ```
-   git clone https://github.com/username/sea-battle.git
-   cd sea-battle
-   ```
+### CI/CD Configuration
 
-2. Create a production environment file:
+The CI/CD pipeline is configured in `.github/workflows/ci-cd.yml`. You can customize it by:
 
-   ```
-   cp .env.production.example .env.production
-   ```
+1. Modifying the trigger branches
+2. Changing the Docker registry credentials
+3. Updating the deployment targets
+4. Adding additional testing or building steps
 
-3. Edit the `.env.production` file with your production settings:
+### Required Secrets
 
-   ```
-   nano .env.production
-   ```
+For the CI/CD pipeline to work properly, you need to add the following secrets to your GitHub repository:
 
-4. Deploy using the provided script:
+- `DOCKER_USERNAME`: Your Docker registry username
+- `DOCKER_PASSWORD`: Your Docker registry password
+- `STAGING_SSH_KEY`: SSH private key for staging server
+- `PRODUCTION_SSH_KEY`: SSH private key for production server
+- `STAGING_HOST`: Hostname of the staging server
+- `PRODUCTION_HOST`: Hostname of the production server
 
-   ```
-   ./scripts/deploy.sh
-   ```
+## API Documentation
 
-   Alternatively, you can manually deploy with:
+API documentation is available using the OpenAPI (Swagger) specification. You can access it at:
 
-   ```
-   docker-compose -f docker-compose.prod.yml up -d
-   ```
+- Development: http://localhost:3000/api-docs
+- Staging: https://staging-api.seabattle-game.example.com/api-docs
+- Production: https://api.seabattle-game.example.com/api-docs
 
-5. The application will be available at:
-   - Web client: http://your-server-ip (port 80)
-   - Server API: http://your-server-ip:3000 (only if port 3000 is exposed)
+The API documentation provides detailed information about all available endpoints, request/response formats, and authentication requirements.
 
-### Production Configuration
+## Game Mechanics
 
-The production setup uses:
-
-- Multi-stage Docker builds for optimized image size
-- Nginx to serve static files and provide reverse proxy to API
-- Proper security headers and caching configurations
-- Automatic container restart on failure
-
-### Staging Environment
-
-The project includes a staging environment configuration for testing before production deployment.
-
-1. Deploy to staging using the provided script:
-
-   ```
-   ./scripts/deploy-staging.sh
-   ```
-
-2. The staging application will be available at:
-   - Web client: http://localhost:8080
-   - Server API: http://localhost:8081
-
-The staging environment uses:
-
-- The `develop` branch of the Git repository
-- Different ports to avoid conflicts with production
-- A separate database and environment configuration
-- The same Docker infrastructure as production for consistency
-
-### Updating Production
-
-To update a running production instance:
-
-1. Pull the latest changes:
-
-   ```
-   git pull origin main
-   ```
-
-2. Rebuild and restart the containers:
-   ```
-   docker-compose -f docker-compose.prod.yml up -d --build
-   ```
+Detailed documentation about the game mechanics and rules is available in the [Game Mechanics Documentation](docs/game-mechanics.md).
 
 ## Project Roadmap
 

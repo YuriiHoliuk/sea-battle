@@ -1,0 +1,670 @@
+openapi: 3.0.3
+info:
+  title: Sea Battle API
+  description: API documentation for the Sea Battle game
+  version: 1.0.0
+  contact:
+    email: admin@example.com
+servers:
+  - url: https://api.seabattle-game.example.com/v1
+    description: Production server
+  - url: https://staging-api.seabattle-game.example.com/v1
+    description: Staging server
+  - url: http://localhost:3000/v1
+    description: Development server
+
+tags:
+  - name: auth
+    description: Authentication operations
+  - name: users
+    description: User operations
+  - name: games
+    description: Game operations
+  - name: matchmaking
+    description: Matchmaking operations
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Log in a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /games:
+    post:
+      tags:
+        - games
+      summary: Create a new game
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGameRequest'
+      responses:
+        '201':
+          description: Game created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    get:
+      tags:
+        - games
+      summary: Get list of user's games
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Filter games by status
+          schema:
+            type: string
+            enum: [active, completed]
+        - name: limit
+          in: query
+          description: Maximum number of games to return
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: Number of games to skip
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /games/{gameId}:
+    get:
+      tags:
+        - games
+      summary: Get game details
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Game details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Game not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /games/{gameId}/ships:
+    post:
+      tags:
+        - games
+      summary: Place ships on the game board
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaceShipsRequest'
+      responses:
+        '200':
+          description: Ships placed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '400':
+          description: Invalid ship placement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Game not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /games/{gameId}/fire:
+    post:
+      tags:
+        - games
+      summary: Fire at a coordinate
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FireRequest'
+      responses:
+        '200':
+          description: Shot result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FireResponse'
+        '400':
+          description: Invalid shot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Game not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /matchmaking/queue:
+    post:
+      tags:
+        - matchmaking
+      summary: Join matchmaking queue
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinQueueRequest'
+      responses:
+        '200':
+          description: Joined queue successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    delete:
+      tags:
+        - matchmaking
+      summary: Leave matchmaking queue
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Left queue successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /matchmaking/lobbies:
+    post:
+      tags:
+        - matchmaking
+      summary: Create a private lobby
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLobbyRequest'
+      responses:
+        '201':
+          description: Lobby created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lobby'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /matchmaking/lobbies/{lobbyId}/join:
+    post:
+      tags:
+        - matchmaking
+      summary: Join a private lobby
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lobbyId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinLobbyRequest'
+      responses:
+        '200':
+          description: Joined lobby successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lobby'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Lobby not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - username
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        username:
+          type: string
+          minLength: 3
+          maxLength: 20
+        password:
+          type: string
+          minLength: 8
+    
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    
+    AuthResponse:
+      type: object
+      required:
+        - user
+        - token
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
+    
+    User:
+      type: object
+      required:
+        - id
+        - username
+        - email
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        avatarUrl:
+          type: string
+          format: uri
+        stats:
+          $ref: '#/components/schemas/UserStats'
+    
+    UserStats:
+      type: object
+      properties:
+        wins:
+          type: integer
+        losses:
+          type: integer
+        totalGames:
+          type: integer
+        winRate:
+          type: number
+          format: float
+        rating:
+          type: integer
+    
+    CreateGameRequest:
+      type: object
+      required:
+        - gameType
+      properties:
+        gameType:
+          type: string
+          enum: [singleplayer, multiplayer]
+        aiDifficulty:
+          type: string
+          enum: [easy, medium, hard]
+          description: Required for singleplayer games
+    
+    Game:
+      type: object
+      required:
+        - id
+        - status
+        - players
+        - currentTurn
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [waiting, setup, active, completed]
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/GamePlayer'
+        currentTurn:
+          type: string
+          format: uuid
+          description: ID of the player whose turn it is
+        winner:
+          type: string
+          format: uuid
+          description: ID of the winning player (if game is completed)
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    
+    GamePlayer:
+      type: object
+      required:
+        - id
+        - username
+        - ready
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        ready:
+          type: boolean
+          description: Whether the player has placed their ships
+        avatarUrl:
+          type: string
+          format: uri
+    
+    Coordinate:
+      type: object
+      required:
+        - x
+        - y
+      properties:
+        x:
+          type: integer
+          minimum: 0
+          maximum: 9
+        y:
+          type: integer
+          minimum: 0
+          maximum: 9
+    
+    Ship:
+      type: object
+      required:
+        - type
+        - position
+        - orientation
+      properties:
+        type:
+          type: string
+          enum: [carrier, battleship, cruiser, submarine, destroyer]
+        position:
+          $ref: '#/components/schemas/Coordinate'
+        orientation:
+          type: string
+          enum: [horizontal, vertical]
+    
+    PlaceShipsRequest:
+      type: object
+      required:
+        - ships
+      properties:
+        ships:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ship'
+          minItems: 5
+          maxItems: 5
+    
+    FireRequest:
+      type: object
+      required:
+        - coordinate
+      properties:
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+    
+    FireResponse:
+      type: object
+      required:
+        - hit
+        - coordinate
+      properties:
+        hit:
+          type: boolean
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        shipSunk:
+          type: boolean
+        shipType:
+          type: string
+          enum: [carrier, battleship, cruiser, submarine, destroyer]
+        gameOver:
+          type: boolean
+    
+    JoinQueueRequest:
+      type: object
+      properties:
+        gameMode:
+          type: string
+          enum: [casual, ranked]
+          default: casual
+    
+    QueueResponse:
+      type: object
+      required:
+        - position
+        - estimatedWaitTime
+      properties:
+        position:
+          type: integer
+        estimatedWaitTime:
+          type: integer
+          description: Estimated wait time in seconds
+    
+    CreateLobbyRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+    
+    JoinLobbyRequest:
+      type: object
+      properties:
+        password:
+          type: string
+    
+    Lobby:
+      type: object
+      required:
+        - id
+        - name
+        - host
+        - players
+        - hasPassword
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        host:
+          $ref: '#/components/schemas/User'
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        hasPassword:
+          type: boolean
+        maxPlayers:
+          type: integer
+          default: 2
+    
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string 
