@@ -139,8 +139,6 @@ export function autoPlaceShips(ships: Ship[]): { grid: Grid; placedShips: Ship[]
 /**
  * Grid utility functions for Sea Battle
  */
-import { Orientation, Ship, SHIP_SIZES, ShipType } from '../types/game';
-import { GRID_SIZE } from '../constants/game';
 
 /**
  * Check if a position is within the grid boundaries

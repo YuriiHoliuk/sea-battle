@@ -77,7 +77,7 @@ export function processShot(
   }
 
   const newGrid = grid.map(row => [...row]);
-  let result: ShotResult;
+  let result: ShotResult = ShotResult.MISS;
   let shipSunk: Ship | undefined;
 
   // Get the cell state at the shot position
@@ -95,9 +95,9 @@ export function processShot(
     // Update the ship that was hit
     const updatedShips = ships.map(ship => {
       // Check if this shot hit this ship
-      const isPositionOnShip = isPositionOnShip(ship, position);
+      const isShipHit = isPositionOnShip(ship, position);
 
-      if (isPositionOnShip) {
+      if (isShipHit) {
         // Add hit to the ship
         const newHits = [...ship.hits, { ...position }];
         const shipSize = SHIP_SIZES[ship.type];
