@@ -44,7 +44,7 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
-      - name: Build Client and Server
+      - name: Build All Packages in Correct Order
         run: yarn build
 
       - name: Upload Build Artifacts

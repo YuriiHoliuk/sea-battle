@@ -17,7 +17,7 @@
     "parse-prd": "node scripts/dev.js parse-prd",
     "start": "concurrently \"yarn workspace @sea-battle/server dev\" \"yarn workspace @sea-battle/web dev\"",
     "start:mobile": "yarn workspace @sea-battle/mobile start",
-    "build": "yarn workspaces run build",
+    "build": "yarn workspaces foreach --topological run build",
     "test": "yarn workspaces run test",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix",
