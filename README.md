@@ -100,6 +100,96 @@ The Docker setup includes:
 - Proper networking between services
 - Environment variable configuration
 
+## Production Deployment
+
+### Prerequisites
+
+- A Linux server with Docker and Docker Compose installed
+- Git access to the repository
+- Domain name (optional)
+
+### Deployment Steps
+
+1. Clone the repository to your production server:
+
+   ```
+   git clone https://github.com/username/sea-battle.git
+   cd sea-battle
+   ```
+
+2. Create a production environment file:
+
+   ```
+   cp .env.production.example .env.production
+   ```
+
+3. Edit the `.env.production` file with your production settings:
+
+   ```
+   nano .env.production
+   ```
+
+4. Deploy using the provided script:
+
+   ```
+   ./scripts/deploy.sh
+   ```
+
+   Alternatively, you can manually deploy with:
+
+   ```
+   docker-compose -f docker-compose.prod.yml up -d
+   ```
+
+5. The application will be available at:
+   - Web client: http://your-server-ip (port 80)
+   - Server API: http://your-server-ip:3000 (only if port 3000 is exposed)
+
+### Production Configuration
+
+The production setup uses:
+
+- Multi-stage Docker builds for optimized image size
+- Nginx to serve static files and provide reverse proxy to API
+- Proper security headers and caching configurations
+- Automatic container restart on failure
+
+### Staging Environment
+
+The project includes a staging environment configuration for testing before production deployment.
+
+1. Deploy to staging using the provided script:
+
+   ```
+   ./scripts/deploy-staging.sh
+   ```
+
+2. The staging application will be available at:
+   - Web client: http://localhost:8080
+   - Server API: http://localhost:8081
+
+The staging environment uses:
+
+- The `develop` branch of the Git repository
+- Different ports to avoid conflicts with production
+- A separate database and environment configuration
+- The same Docker infrastructure as production for consistency
+
+### Updating Production
+
+To update a running production instance:
+
+1. Pull the latest changes:
+
+   ```
+   git pull origin main
+   ```
+
+2. Rebuild and restart the containers:
+   ```
+   docker-compose -f docker-compose.prod.yml up -d --build
+   ```
+
 ## Project Roadmap
 
 1. Setup project repository and base architecture

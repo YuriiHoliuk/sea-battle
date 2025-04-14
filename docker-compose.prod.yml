@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  client:
+    image: sea-battle-client-prod
+    build:
+      context: .
+      dockerfile: client/web/Dockerfile
+    ports:
+      - '81:80'
+    restart: always
+    depends_on:
+      - server
+    networks:
+      - sea-battle-network
+
+  server:
+    image: sea-battle-server-prod
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+      no_cache: true # Force rebuild to ensure latest changes are included
+    ports:
+      - '3000:3000'
+    restart: always
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DEBUG=true # Enable debug output to help troubleshoot
+    networks:
+      - sea-battle-network
+
+networks:
+  sea-battle-network:
+    driver: bridge

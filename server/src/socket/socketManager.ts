@@ -1,7 +1,7 @@
 import { Server as SocketIOServer } from 'socket.io';
 import http from 'node:http';
 import { GameEvents, SocketEvents } from '@sea-battle/shared';
-import { SERVER_CONFIG } from '../config/index.js';
+import { SERVER_CONFIG } from '../config/index';
 
 // Game session interface
 interface GameSession {

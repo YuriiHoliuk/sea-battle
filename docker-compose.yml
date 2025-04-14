@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   client:
+    image: sea-battle-client-dev
     build:
       context: .
       dockerfile: client/web/Dockerfile.dev
@@ -17,6 +18,7 @@ services:
       - server
 
   server:
+    image: sea-battle-server-dev
     build:
       context: .
       dockerfile: server/Dockerfile.dev
