@@ -29,6 +29,7 @@ coverage/
 *.njsproj
 *.sln
 *.sw?
+.cursor/mcp.json
 
 # OS specific
 .DS_Store
