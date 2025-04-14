@@ -1,4 +1,5 @@
 import { CellState, Grid as GridType, Position, Ship } from '../../types/game';
+import { ShipPlacementValidator, ValidationResult } from './ShipPlacementValidator';
 
 /**
  * Grid class representing the 10x10 game board
@@ -7,12 +8,17 @@ export class Grid {
   private grid: GridType;
   private ships: Ship[] = [];
   private readonly size: number;
+  private readonly adjacentShipsAllowed: boolean;
+  private lastPlacementResult: ValidationResult | null = null;
 
   /**
    * Creates a new grid with optional custom size (default 10x10)
+   * @param size Grid size (default 10)
+   * @param adjacentShipsAllowed Whether ships can be placed adjacent to each other (default true)
    */
-  constructor(size: number = 10) {
+  constructor(size: number = 10, adjacentShipsAllowed: boolean = true) {
     this.size = size;
+    this.adjacentShipsAllowed = adjacentShipsAllowed;
     this.grid = this.createEmptyGrid();
   }
 
@@ -70,9 +76,20 @@ export class Grid {
 
   /**
    * Places a ship on the grid if the position is valid
+   * @returns true if placement was successful, false otherwise
    */
   public placeShip(ship: Ship): boolean {
-    if (!this.isValidShipPlacement(ship)) {
+    const validator = new ShipPlacementValidator(
+      this.grid,
+      this.ships,
+      this.size,
+      this.adjacentShipsAllowed
+    );
+
+    const validationResult = validator.validateShipPlacement(ship);
+    this.lastPlacementResult = validationResult;
+
+    if (!validationResult.valid) {
       return false;
     }
 
@@ -89,15 +106,26 @@ export class Grid {
   }
 
   /**
+   * Gets the result of the last ship placement attempt
+   * including any error messages
+   */
+  public getLastPlacementResult(): ValidationResult | null {
+    return this.lastPlacementResult;
+  }
+
+  /**
    * Validates if a ship placement is valid (within boundaries and not overlapping)
+   * @deprecated Use placeShip and check the return value or getLastPlacementResult for detailed errors
    */
   public isValidShipPlacement(ship: Ship): boolean {
-    const positions = this.getShipPositions(ship);
-
-    // Check if all positions are valid and not occupied
-    return positions.every(
-      pos => this.isValidPosition(pos) && this.grid[pos.y][pos.x] === CellState.EMPTY
+    const validator = new ShipPlacementValidator(
+      this.grid,
+      this.ships,
+      this.size,
+      this.adjacentShipsAllowed
     );
+
+    return validator.validateShipPlacement(ship).valid;
   }
 
   /**
@@ -191,5 +219,6 @@ export class Grid {
   public reset(): void {
     this.grid = this.createEmptyGrid();
     this.ships = [];
+    this.lastPlacementResult = null;
   }
 }

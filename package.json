@@ -23,7 +23,8 @@
     "lint:fix": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\" --ignore-path .gitignore",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\" --ignore-path .gitignore",
-    "prepare": "husky"
+    "prepare": "husky",
+    "all": "yarn lint && yarn format && yarn test"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
