@@ -1,7 +1,145 @@
 /**
+ * Grid Utilities for Sea Battle
+ */
+
+import { CellState, Direction, Grid, Orientation, Position, Ship, ShipType, SHIP_SIZES } from '../types/game';
+import { GRID_SIZE } from '../constants/game';
+
+// Default empty grid
+export const DEFAULT_GRID: Grid = Array(GRID_SIZE).fill(null).map(() => 
+  Array(GRID_SIZE).fill(CellState.EMPTY)
+);
+
+/**
+ * Checks if a position is valid on the grid
+ */
+export function isValidPosition(position: Position): boolean {
+  return (
+    position.x >= 0 &&
+    position.x < GRID_SIZE &&
+    position.y >= 0 &&
+    position.y < GRID_SIZE
+  );
+}
+
+/**
+ * Checks if a ship can be placed at the specified position and direction
+ */
+export function canPlaceShip(
+  grid: Grid, 
+  ship: Ship, 
+  position: Position, 
+  direction: Direction
+): boolean {
+  const shipSize = SHIP_SIZES[ship.type];
+  
+  // Check if ship fits on the grid
+  if (direction === Direction.HORIZONTAL) {
+    if (position.x + shipSize > GRID_SIZE) return false;
+  } else {
+    if (position.y + shipSize > GRID_SIZE) return false;
+  }
+  
+  // Check if all cells are empty and there's no adjacent ships
+  for (let i = -1; i <= shipSize; i++) {
+    for (let j = -1; j <= 1; j++) {
+      const x = direction === Direction.HORIZONTAL ? position.x + i : position.x + j;
+      const y = direction === Direction.HORIZONTAL ? position.y + j : position.y + i;
+      
+      // Skip checks outside the grid
+      if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) continue;
+      
+      // If there's already a ship in the cell or adjacent cells, return false
+      if (i >= 0 && i < shipSize && j === 0) {
+        if (grid[y][x] !== CellState.EMPTY) return false;
+      } else {
+        // Check adjacent cells (diagonal and surrounding)
+        if (grid[y][x] === CellState.SHIP) return false;
+      }
+    }
+  }
+  
+  return true;
+}
+
+/**
+ * Places a ship on the grid and returns the updated grid
+ */
+export function placeShip(
+  grid: Grid, 
+  ship: Ship, 
+  position: Position, 
+  direction: Direction
+): Grid {
+  if (!canPlaceShip(grid, ship, position, direction)) {
+    return grid;
+  }
+  
+  const newGrid = grid.map(row => [...row]);
+  const shipSize = SHIP_SIZES[ship.type];
+  
+  for (let i = 0; i < shipSize; i++) {
+    if (direction === Direction.HORIZONTAL) {
+      newGrid[position.y][position.x + i] = CellState.SHIP;
+    } else {
+      newGrid[position.y + i][position.x] = CellState.SHIP;
+    }
+  }
+  
+  return newGrid;
+}
+
+/**
+ * Randomly places all ships on the grid
+ */
+export function autoPlaceShips(ships: Ship[]): { grid: Grid, placedShips: Ship[] } {
+  let grid = [...DEFAULT_GRID.map(row => [...row])];
+  const placedShips: Ship[] = [];
+  
+  for (const ship of ships) {
+    let placed = false;
+    let attempts = 0;
+    const maxAttempts = 100;
+    
+    while (!placed && attempts < maxAttempts) {
+      attempts++;
+      
+      // Generate random position and direction
+      const position: Position = {
+        x: Math.floor(Math.random() * GRID_SIZE),
+        y: Math.floor(Math.random() * GRID_SIZE)
+      };
+      const direction = Math.random() > 0.5 ? Direction.HORIZONTAL : Direction.VERTICAL;
+      
+      if (canPlaceShip(grid, ship, position, direction)) {
+        grid = placeShip(grid, ship, position, direction);
+        
+        // Update ship with its position
+        const updatedShip = {
+          ...ship,
+          position,
+          direction,
+          orientation: direction === Direction.HORIZONTAL ? Orientation.HORIZONTAL : Orientation.VERTICAL
+        };
+        
+        placedShips.push(updatedShip);
+        placed = true;
+      }
+    }
+    
+    if (!placed) {
+      // If we couldn't place all ships, start over with an empty grid
+      return autoPlaceShips(ships);
+    }
+  }
+  
+  return { grid, placedShips };
+}
+
+/**
  * Grid utility functions for Sea Battle
  */
-import { Position, Orientation, Ship, SHIP_SIZES, ShipType } from '../types/game';
+import { Orientation, Ship, SHIP_SIZES, ShipType } from '../types/game';
 import { GRID_SIZE } from '../constants/game';
 
 /**

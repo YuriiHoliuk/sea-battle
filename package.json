@@ -14,7 +14,11 @@
     "dev": "node scripts/dev.js",
     "list": "node scripts/dev.js list",
     "generate": "node scripts/dev.js generate",
-    "parse-prd": "node scripts/dev.js parse-prd"
+    "parse-prd": "node scripts/dev.js parse-prd",
+    "start": "concurrently \"yarn workspace @sea-battle/server dev\" \"yarn workspace @sea-battle/web dev\"",
+    "start:mobile": "yarn workspace @sea-battle/mobile start",
+    "build": "yarn workspaces run build",
+    "test": "yarn workspaces run test"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
@@ -35,5 +39,8 @@
     "lru-cache": "^10.2.0",
     "openai": "^4.89.0",
     "ora": "^8.2.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

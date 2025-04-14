@@ -96,7 +96,8 @@ export enum ShotResult {
  */
 export interface GameSettings {
   gridSize: number;
-  timePerTurn: number; // in seconds
+  autoPlaceShips: boolean;
+  timeLimit?: number; // In seconds, optional
 }
 
 /**
@@ -115,4 +116,39 @@ export enum Difficulty {
   EASY = 'easy',
   MEDIUM = 'medium',
   HARD = 'hard',
+}
+
+/**
+ * Direction enum
+ */
+export enum Direction {
+  HORIZONTAL = 'horizontal',
+  VERTICAL = 'vertical',
+}
+
+/**
+ * Grid interface
+ */
+export type Grid = CellState[][];
+
+/**
+ * Player stats interface
+ */
+export interface PlayerStats {
+  wins: number;
+  losses: number;
+  totalShots: number;
+  hits: number;
+  accuracy: number; // Percentage of shots that hit
+}
+
+/**
+ * Game result interface
+ */
+export interface GameResult {
+  winnerId: string;
+  gameId: string;
+  duration: number; // In seconds
+  shots: number;
+  hits: number;
 } 

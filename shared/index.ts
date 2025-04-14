@@ -1,14 +1,15 @@
-// Export all types and utilities from the shared package
+/**
+ * Shared module exports for Sea Battle
+ */
 
-// Types
+// Export all types
 export * from './types/game';
-export * from './types/user';
-export * from './types/api';
+export * from './types/player';
+export * from './types/socket';
 
-// Constants
+// Export all constants
 export * from './constants/game';
-export * from './constants/events';
 
-// Utils
+// Export all utilities
 export * from './utils/grid';
-export * from './utils/validation'; 
+export * from './utils/gameHelpers'; 
