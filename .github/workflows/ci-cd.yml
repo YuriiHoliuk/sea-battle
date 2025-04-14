@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  test:
-    name: Test
+  test_and_build:
+    name: Test and Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,29 +28,5 @@ jobs:
       - name: Run Tests
         run: yarn test
 
-  build:
-    name: Build
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
-
-      - name: Install Dependencies
-        run: yarn install
-
       - name: Build All Packages in Correct Order
         run: yarn build
-
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: |
-            server/dist
-            client/web/build
